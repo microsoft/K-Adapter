@@ -137,7 +137,7 @@ The detailed hyperparamerters are listed in the running script.
 
 **(3) Data format**
 
-For each answer, the input is <s>context</s></s>question</s></s>answer</s>, and will get a score for this answers. After getting four scores, we will select the answer with the highest score.
+For each answer, the input is `<s>context</s></s>question</s></s>answer</s>`, and will get a score for this answers. After getting four scores, we will select the answer with the highest score.
 
 #### 3.2 SearchQA and Quasar-T 
 The source codes for fine-tuning on SearchQA and Quasar-T dataset are modified based on the [code](https://github.com/thunlp/OpenQA) of paper "Denoising Distantly Supervised Open-Domain Question Answering".
