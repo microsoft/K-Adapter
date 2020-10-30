@@ -1,0 +1,5 @@
+.idea
+/data
+/pretrained_models
+/proc_data
+/pytorch_transformers/__pycache__
