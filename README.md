@@ -1,5 +1,5 @@
 # K-Adapter: Infusing Knowledge into Pre-Trained Models with Adapters
-This repository is the implementation of the paper "K-Adapter: Infusing Knowledge into Pre-Trained Models with Adapters".
+This repository is the official implementation of the paper "K-Adapter: Infusing Knowledge into Pre-Trained Models with Adapters", ACL-IJCNLP 2021 Findings.
 
 In the K-adapter paper, we present a flexible approach that supports continual knowledge infusion into large pre-trained models (e.g. RoBERTa in this work).
 We infuse factual knowledge and linguistic knowledge, and show that adapters for both kinds of knowledge work well on downstream tasks.
