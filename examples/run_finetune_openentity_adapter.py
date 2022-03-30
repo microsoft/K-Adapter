@@ -34,7 +34,7 @@ from torch.nn import CrossEntropyLoss, MSELoss, BCEWithLogitsLoss
 from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler,
                               TensorDataset)
 from torch.utils.data.distributed import DistributedSampler
-from tensorboardX import SummaryWriter
+# from tensorboardX import SummaryWriter
 from tqdm import tqdm, trange
 
 import sys

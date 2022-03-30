@@ -28,7 +28,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 from sklearn.metrics import f1_score
 from torch.utils.data.distributed import DistributedSampler
-from tensorboardX import SummaryWriter
+# from tensorboardX import SummaryWriter
 import time
 from utils_glue import processors, convert_examples_to_features_trex, output_modes
 
@@ -118,15 +118,15 @@ def train(args, train_dataset, val_dataset, model, tokenizer):
             start_step = global_step - start_epoch * len(train_dataloader) - 1
             logger.info("Start from global_step={} epoch={} step={}".format(global_step, start_epoch, start_step))
 
-            if args.local_rank in [-1, 0]:
-                tb_writer = SummaryWriter(log_dir="runs/" + args.my_model_name, purge_step=global_step)
+            # if args.local_rank in [-1, 0]:
+            #     tb_writer = SummaryWriter(log_dir="runs/" + args.my_model_name, purge_step=global_step)
 
         else:
             global_step = 0
             start_epoch = 0
             start_step = 0
-            if args.local_rank in [-1, 0]:
-                tb_writer = SummaryWriter(log_dir="runs/" + args.my_model_name, purge_step=global_step)
+            # if args.local_rank in [-1, 0]:
+            #     tb_writer = SummaryWriter(log_dir="runs/" + args.my_model_name, purge_step=global_step)
 
             logger.info("Start from scratch")
     else:
@@ -134,7 +134,8 @@ def train(args, train_dataset, val_dataset, model, tokenizer):
         start_epoch = 0
         start_step = 0
         if args.local_rank in [-1, 0]:
-            tb_writer = SummaryWriter(log_dir="runs/" + args.my_model_name, purge_step=global_step)
+            # tb_writer = SummaryWriter(log_dir="runs/" + args.my_model_name, purge_step=global_step)
+            pass
         logger.info("Start from scratch")
 
     tr_loss, logging_loss = 0.0, 0.0
@@ -197,8 +198,8 @@ def train(args, train_dataset, val_dataset, model, tokenizer):
                 global_step += 1
                 if args.local_rank in [-1, 0] and args.logging_steps > 0 and global_step % args.logging_steps == 0:
                     # Log metrics
-                    tb_writer.add_scalar('lr', scheduler.get_lr()[0], global_step)
-                    tb_writer.add_scalar('loss', (tr_loss - logging_loss) / args.logging_steps, global_step)
+                    # tb_writer.add_scalar('lr', scheduler.get_lr()[0], global_step)
+                    # tb_writer.add_scalar('loss', (tr_loss - logging_loss) / args.logging_steps, global_step)
                     logging_loss = tr_loss
 
                 if args.local_rank in [-1, 0] and args.save_steps > 0 and global_step % args.save_steps == 0:
@@ -225,15 +226,15 @@ def train(args, train_dataset, val_dataset, model, tokenizer):
                 if args.local_rank == -1 and args.evaluate_during_training and global_step % args.eval_steps == 0:  # Only evaluate when single GPU otherwise metrics may not average well
                     model = (pretrained_model,adapter_model)
                     results = evaluate(args, val_dataset, model, tokenizer)
-                    for key, value in results.items():
-                        tb_writer.add_scalar('eval_{}'.format(key), value, global_step)
+                    # for key, value in results.items():
+                    #     tb_writer.add_scalar('eval_{}'.format(key), value, global_step)
             if args.max_steps > 0 and global_step > args.max_steps:
                 break
         if args.max_steps > 0 and global_step > args.max_steps:
             break
 
-    if args.local_rank in [-1, 0]:
-        tb_writer.close()
+    # if args.local_rank in [-1, 0]:
+    #     tb_writer.close()
 
     return global_step, tr_loss / global_step
 
@@ -540,7 +541,7 @@ def load_and_cache_examples(args, task, tokenizer, dataset_type, evaluate=False)
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument("--data_dir", default=None, type=str, required=True,
+    parser.add_argument("--data_dir", default='./data/', type=str, required=True,
                         help="The input data dir. Should contain the .tsv files (or other data files) for the task.")
     parser.add_argument("--model_type", default='roberta', type=str, required=True,
                         help="Model type selected in the list")

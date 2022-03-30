@@ -3,3 +3,7 @@
 /pretrained_models
 /proc_data
 /pytorch_transformers/__pycache__
+.venv
+.vscode
+__pycache__
+output
