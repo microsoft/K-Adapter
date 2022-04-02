@@ -327,6 +327,7 @@ class Adapter(nn.Module):
         self.init_weights()
 
     def forward(self, hidden_states):
+        # This is the core of the Adapter with the down projected, up projected layers
         down_projected = self.down_project(hidden_states)
 
         input_shape = down_projected.size()[:-1]
@@ -415,7 +416,9 @@ class AdapterModel(nn.Module):
         # self.adapter_list =[int(i) for i in self.adapter_list]
         self.adapter_num = len(self.adapter_list)
         # self.adapter = Adapter(args, AdapterConfig)
-
+        
+        # here we create this module list that contains the adapterconfig for the adapter list of 0,11,23
+        # so in the forward for loop we can train
         self.adapter = nn.ModuleList([Adapter(args, AdapterConfig) for _ in range(self.adapter_num)])
 
         self.com_dense = nn.Linear(self.config.hidden_size * 2, self.config.hidden_size)
@@ -427,9 +430,9 @@ class AdapterModel(nn.Module):
                 labels=None, subj_special_start_id=None, obj_special_start_id=None):
 
         outputs = pretrained_model_outputs
-        sequence_output = outputs[0]
+        sequence_output = outputs[0] # 24-th hidden layer
         # pooler_output = outputs[1]
-        hidden_states = outputs[2]
+        hidden_states = outputs[2] # all hidden layers so we can take 0,11,23 later
         num = len(hidden_states)
         hidden_states_last = torch.zeros(sequence_output.size()).to(self.args.device)
 
@@ -569,7 +572,7 @@ def main():
 
     parser.add_argument("--adapter_transformer_layers", default=2, type=int,
                         help="The transformer layers of adapter.")
-    parser.add_argument("--adapter_size", default=128, type=int,
+    parser.add_argument("--adapter_size", default=768, type=int,
                         help="The hidden size of adapter.")
     parser.add_argument("--adapter_list", default="0,11,23", type=str,
                         help="The layer where add an adapter")

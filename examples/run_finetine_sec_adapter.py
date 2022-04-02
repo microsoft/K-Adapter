@@ -17,6 +17,7 @@ from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler,
                               TensorDataset)
 from torch.utils.data.distributed import DistributedSampler
 # from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm, trange
 
 import sys
@@ -187,7 +188,6 @@ class Adapter(nn.Module):
         return hidden_states + up_projected
 
 class RegressorModel(nn.Module):
-    # TO DO: Fix to use only Fac adapter
     def __init__(self, args, pretrained_model_config, fac_adapter, et_adapter, lin_adapter):
         super(RegressorModel, self).__init__()
         self.args = args
@@ -358,8 +358,8 @@ def train(args, train_dataset, model, tokenizer):
     pretrained_model = model[0]
     regressor_model = model[1]
 
-    # if args.local_rank in [-1, 0]:
-        # tb_writer = SummaryWriter(log_dir="runs/" + args.my_model_name)
+    if args.local_rank in [-1, 0]:
+        tb_writer = SummaryWriter(log_dir="runs/" + args.my_model_name)
 
     args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
     train_sampler = RandomSampler(train_dataset) if args.local_rank == -1 else DistributedSampler(train_dataset)
@@ -496,12 +496,12 @@ def train(args, train_dataset, model, tokenizer):
 
                 if args.local_rank in [-1, 0] and args.logging_steps > 0 and global_step % args.logging_steps == 0:
                     # Log metrics
-                    # if args.local_rank == -1 and args.evaluate_during_training:  # Only evaluate when single GPU otherwise metrics may not average well
-                        # results = evaluate(args, model, tokenizer)
-                        # for key, value in results.items():
-                        #     tb_writer.add_scalar('eval_{}'.format(key), value, global_step)
-                    # tb_writer.add_scalar('lr', scheduler.get_lr()[0], global_step)
-                    # tb_writer.add_scalar('loss', (tr_loss - logging_loss)/args.logging_steps, global_step)
+                    if args.local_rank == -1 and args.evaluate_during_training:  # Only evaluate when single GPU otherwise metrics may not average well
+                        results = evaluate(args, model, tokenizer)
+                        for key, value in results.items():
+                            tb_writer.add_scalar('eval_{}'.format(key), value, global_step)
+                    tb_writer.add_scalar('lr', scheduler.get_lr()[0], global_step)
+                    tb_writer.add_scalar('loss', (tr_loss - logging_loss)/args.logging_steps, global_step)
                     logging_loss = tr_loss
 
                 if args.local_rank in [-1, 0] and args.save_steps > 0 and global_step % args.save_steps == 0:
@@ -531,8 +531,8 @@ def train(args, train_dataset, model, tokenizer):
         # for key, value in results.items():
         #     tb_writer.add_scalar('eval_{}'.format(key), value, global_step)
     #
-    # if args.local_rank in [-1, 0]:
-    #     tb_writer.close()
+    if args.local_rank in [-1, 0]:
+        tb_writer.close()
 
     return global_step, tr_loss / global_step
 
