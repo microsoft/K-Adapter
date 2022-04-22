@@ -13,7 +13,7 @@
             "justMyCode": true,
             "args": [
                 "--data_dir",
-                "./data/real_input_sec/k_fold_1",
+                "./sample_data/real_input_sec/k_fold_1",
                 "--model_type",
                 "roberta",
                 "--model_name_or_path",
