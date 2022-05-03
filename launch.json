@@ -22,8 +22,8 @@
                 "sec_regressor",
                 "--output_dir",
                 "./output",
-                "--do_train",
+                "--do_train"
             ]
-        },
+        }
     ]
 }
