@@ -153,5 +153,3 @@ bash run_example.sh
 - Remove and merge redundant codes
 - Support other pre-trained models, such as BERT...
 
-## Contact
-Feel free to contact Ruize Wang (rzwang18@fudan.edu.cn) if you have any further questions.
