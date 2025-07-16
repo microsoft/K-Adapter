@@ -25,7 +25,7 @@ In the pre-training procedure, we train each knowledge-specific adapter on diffe
 ### 1. Process Dataset
 - `./scripts/clean_T_REx.py`: clean [raw T-Rex dataset](https://hadyelsahar.github.io/t-rex/downloads/) (32G), and save the cleaned T-Rex to JSON format
 - `./scripts/create_subdataset-relation-classification.ipynb`: create the dataset from T-REx for pre-training factual adapter on relation classification task. This sub-dataset can be found [here](https://drive.google.com/drive/folders/1xRGmIUXwPrtnsksQ1GY8YAE87gf7Ct6E?usp=sharing).
-- `refer to this` [code](https://github.com/windweller/DisExtract/tree/master/preprocessing) to get the dependency parsing dataset : create the dataset from Book Corpus for pre-training the linguistic adapter on dependency parsing task.
+- `refer to this` to get the dependency parsing dataset : create the dataset from Book Corpus for pre-training the linguistic adapter on dependency parsing task.
 
 ### 2. Factual Adapter
 To pre-train fac-adapter, run
